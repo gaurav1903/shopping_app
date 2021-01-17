@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shopping_app/widgets/product_item.dart';
 import 'package:provider/provider.dart';
-import 'package:shopping_app/providers/productsss.dart';
+import 'package:shopping_app/providers/product_data.dart';
 
 class ProductOverviewScreen extends StatelessWidget {
   @override
@@ -19,7 +19,7 @@ class ProductOverviewScreen extends StatelessWidget {
 class ProductGrid extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final productdata = Provider.of<Productss>(context);
+    final productdata = Provider.of<ProductData>(context);
     final products = productdata.items;
     return GridView.builder(
         padding: EdgeInsets.all(10),
@@ -30,10 +30,9 @@ class ProductGrid extends StatelessWidget {
             crossAxisSpacing: 10,
             mainAxisSpacing: 10),
         itemBuilder: (context, index) {
-          return ProductItem(
-            id: products[index].id,
-            title: products[index].title,
-            imageurl: products[index].imageurl,
+          return ChangeNotifierProvider.value(
+            value: products[index],
+            child: ProductItem(),
           );
         });
   }
