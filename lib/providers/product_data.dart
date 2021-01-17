@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:shopping_app/models/product.dart';
+import 'file:///C:/Users/gaura/AndroidStudioProjects/shopping_app/lib/providers/product.dart';
 
 class ProductData with ChangeNotifier {
   List<Product> _items = [
@@ -32,6 +32,7 @@ class ProductData with ChangeNotifier {
         imageurl:
             'https://media.mauvetree.com/wp-content/uploads/2018/04/Black-trench-coat-for-men.jpg')
   ];
+
   List<Product> get items {
     return [..._items];
   }
