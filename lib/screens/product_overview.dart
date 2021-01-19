@@ -1,8 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:shopping_app/widgets/21.1%20badge.dart';
 import 'package:shopping_app/widgets/product_item.dart';
 import 'package:provider/provider.dart';
 import 'package:shopping_app/providers/product_data.dart';
+import '../providers/cart.dart';
 
 enum Filteropt { Favourites, All }
 
@@ -15,7 +17,6 @@ class _ProductOverviewScreenState extends State<ProductOverviewScreen> {
   bool showonlyfavourites = false;
   @override
   Widget build(BuildContext context) {
-    final productcontainer = Provider.of<ProductData>(context, listen: false);
     return Scaffold(
       appBar: AppBar(
         title: Text('My Shop'),
@@ -38,7 +39,18 @@ class _ProductOverviewScreenState extends State<ProductOverviewScreen> {
                     showonlyfavourites = false;
                 });
               },
-              icon: Icon(Icons.more_vert))
+              icon: Icon(Icons.more_vert)),
+          Consumer<Cart>(
+            builder: (context, cartdata, ch) {
+              return Badge(child: ch, value: cartdata.itemcount.toString());
+            },
+            child: IconButton(
+              icon: Icon(Icons.shopping_cart),
+              onPressed: () {
+                return Navigator.of(context).pushNamed('/cartscreen');
+              },
+            ),
+          ),
         ],
       ),
       body: ProductGrid(showonlyfavourites),
