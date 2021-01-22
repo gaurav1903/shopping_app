@@ -6,6 +6,7 @@ import 'screens/product_detail.dart';
 import 'package:provider/provider.dart';
 import 'providers/product_data.dart';
 import 'providers/orders.dart';
+import './screens/orderscreen.dart';
 
 void main() {
   runApp(MyApp());
@@ -33,22 +34,9 @@ class MyApp extends StatelessWidget {
         routes: {
           '/productdetail': (_) => ProductDetail(),
           '/cartscreen': (_) => CartScreen(),
+          '/orderscreen': (_) => OrderScreen(),
         },
         home: ProductOverviewScreen(),
-      ),
-    );
-  }
-}
-
-class MyHomePage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('MyShop'),
-      ),
-      body: Center(
-        child: Text('Let\'s build a shop!'),
       ),
     );
   }
