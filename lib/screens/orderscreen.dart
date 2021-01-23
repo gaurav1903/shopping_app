@@ -13,9 +13,13 @@ class OrderScreen extends StatelessWidget {
         title: Text('Your Orders'),
       ),
       drawer: AppDrawer(),
-      body: ListView.builder(
-          itemCount: orderdata.orders.length,
-          itemBuilder: (context, index) => OrderItem(orderdata.orders[index])),
+      body: Container(
+        height: 400,
+        child: ListView.builder(
+            itemCount: orderdata.orders.length,
+            itemBuilder: (context, index) =>
+                OrderItem(orderdata.orders[index])),
+      ),
     );
   }
 }
