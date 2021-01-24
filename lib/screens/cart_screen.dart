@@ -42,6 +42,7 @@ class CartScreen extends StatelessWidget {
                       Provider.of<Orders>(context, listen: false).addorders(
                           cart.items.values.toList(), cart.totalamount);
                       cart.clearcart();
+                      Navigator.of(context).popAndPushNamed('/orderscreen');
                     },
                     child: Text(
                       'Place Order',
