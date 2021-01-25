@@ -12,7 +12,13 @@ class UserProduct extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text('Your Products'),
-        actions: [IconButton(icon: Icon(Icons.add), onPressed: () {})],
+        actions: [
+          IconButton(
+              icon: Icon(Icons.add),
+              onPressed: () {
+                Navigator.of(context).pushNamed('/edit_product');
+              })
+        ],
       ),
       drawer: AppDrawer(),
       body: Padding(
@@ -25,7 +31,7 @@ class UserProduct extends StatelessWidget {
                   title: product_data.items[index].title,
                   imageurl: product_data.items[index].imageurl,
                 ),
-                Divider()
+                Divider(),
               ],
             );
           },
