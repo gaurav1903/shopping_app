@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'file:///C:/Users/gaura/AndroidStudioProjects/shopping_app/lib/providers/product.dart';
+import '../providers/product.dart';
 import 'package:shopping_app/providers/cart.dart';
 
 class ProductItem extends StatelessWidget {

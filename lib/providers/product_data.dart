@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'file:///C:/Users/gaura/AndroidStudioProjects/shopping_app/lib/providers/product.dart';
+import 'package:shopping_app/providers/product.dart';
 
 class ProductData with ChangeNotifier {
   List<Product> _items = [
@@ -37,8 +37,26 @@ class ProductData with ChangeNotifier {
     return [..._items];
   }
 
-  void addProduct() {
+  void addProduct(Product prod) {
+    final newprod = Product(
+        id: DateTime.now().toString(),
+        title: prod.title,
+        description: prod.description,
+        imageurl: prod.imageurl,
+        price: prod.price);
+    _items.add(newprod);
     //_items.add(val);
+    notifyListeners();
+  }
+
+  void updateproduct(String id, Product newproduct) {
+    final productindex = _items.indexWhere((element) => element.id == id);
+    _items[productindex] = newproduct;
+    notifyListeners();
+  }
+
+  void deleteproduct(String id) {
+    _items.removeWhere((element) => element.id == id);
     notifyListeners();
   }
 

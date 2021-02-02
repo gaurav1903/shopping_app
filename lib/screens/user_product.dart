@@ -14,10 +14,11 @@ class UserProduct extends StatelessWidget {
         title: Text('Your Products'),
         actions: [
           IconButton(
-              icon: Icon(Icons.add),
-              onPressed: () {
-                Navigator.of(context).pushNamed('/edit_product');
-              })
+            icon: Icon(Icons.add),
+            onPressed: () {
+              Navigator.of(context).pushNamed('/editproduct');
+            },
+          )
         ],
       ),
       drawer: AppDrawer(),
@@ -30,6 +31,7 @@ class UserProduct extends StatelessWidget {
                 UserProductItem(
                   title: product_data.items[index].title,
                   imageurl: product_data.items[index].imageurl,
+                  id: product_data.items[index].id,
                 ),
                 Divider(),
               ],
