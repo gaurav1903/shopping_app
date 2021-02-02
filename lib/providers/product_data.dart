@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shopping_app/providers/product.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class ProductData with ChangeNotifier {
   List<Product> _items = [
@@ -37,16 +39,28 @@ class ProductData with ChangeNotifier {
     return [..._items];
   }
 
-  void addProduct(Product prod) {
-    final newprod = Product(
-        id: DateTime.now().toString(),
-        title: prod.title,
-        description: prod.description,
-        imageurl: prod.imageurl,
-        price: prod.price);
-    _items.add(newprod);
-    //_items.add(val);
-    notifyListeners();
+  Future<void> addProduct(Product prod) {
+    const url = "gs://shopping-app-2cb0f.appspot.com/product_data.json";
+    return http
+        .post(url,
+            body: json.encode({
+              'title': prod.title,
+              'description': prod.description,
+              'imageurl': prod.imageurl,
+              'price': prod.price,
+              'isfavourite': prod.isFavourite,
+            }))
+        .then((value) {
+      final newprod = Product(
+          id: json.decode(value.body)['name'],
+          title: prod.title,
+          description: prod.description,
+          imageurl: prod.imageurl,
+          price: prod.price);
+      _items.add(newprod);
+      //_items.add(val);
+      notifyListeners();
+    });
   }
 
   void updateproduct(String id, Product newproduct) {
