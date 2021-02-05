@@ -40,7 +40,9 @@ class ProductData with ChangeNotifier {
   }
 
   Future<void> addProduct(Product prod) {
-    const url = "gs://shopping-app-2cb0f.appspot.com/product_data.json";
+    print('adding status');
+    const url =
+        "https://shopping-app-2cb0f-default-rtdb.firebaseio.com//productdata.json";
     return http
         .post(url,
             body: json.encode({
@@ -51,6 +53,7 @@ class ProductData with ChangeNotifier {
               'isfavourite': prod.isFavourite,
             }))
         .then((value) {
+      print(json.decode(value.body));
       final newprod = Product(
           id: json.decode(value.body)['name'],
           title: prod.title,
@@ -60,6 +63,10 @@ class ProductData with ChangeNotifier {
       _items.add(newprod);
       //_items.add(val);
       notifyListeners();
+    }).catchError((error) {
+      print(error);
+      print('eror caught');
+      throw error;
     });
   }
 

@@ -16,6 +16,7 @@ class UserProduct extends StatelessWidget {
           IconButton(
             icon: Icon(Icons.add),
             onPressed: () {
+              print('status add');
               Navigator.of(context).pushNamed('/editproduct');
             },
           )

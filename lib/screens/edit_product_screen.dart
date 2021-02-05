@@ -24,25 +24,10 @@ class _EditProductScreenState extends State<EditProductScreen> {
     'imageurl': ''
   };
   @override
-  void dispose() {
-    pricefocusnode.dispose();
-    descriptfocusnode.dispose();
-    imageurlcontroller.dispose();
-    imageurlfocusnode.dispose();
-    imageurlfocusnode.removeListener(() {
-      return updateimageurl;
-    });
-    super.dispose();
-  }
-
-  @override
   void initState() {
     imageurlfocusnode.addListener(() => updateimageurl);
     super.initState();
   }
-
-  var _isinit = true;
-  var _isloading = false;
 
   @override
   void didChangeDependencies() {
@@ -64,33 +49,79 @@ class _EditProductScreenState extends State<EditProductScreen> {
     super.didChangeDependencies();
   }
 
+  @override
+  void dispose() {
+    imageurlfocusnode.removeListener(updateimageurl);
+    pricefocusnode.dispose();
+    descriptfocusnode.dispose;
+    imageurlcontroller.dispose();
+    imageurlfocusnode.dispose();
+    super.dispose();
+  }
+
+  var _isinit = true;
+  var _isloading = false;
+
   void updateimageurl() {
     if (!imageurlfocusnode.hasFocus) {
+      if ((!imageurlcontroller.text.startsWith('http') &&
+              !imageurlcontroller.text.startsWith('https')) ||
+          (!imageurlcontroller.text.endsWith('.png') &&
+              !imageurlcontroller.text.endsWith('.jpg') &&
+              !imageurlcontroller.text.endsWith('.jpeg'))) {
+        return;
+      }
       setState(() {});
     }
   }
 
   void saveform() {
+    print('status 3');
     _form.currentState.save();
-    setState(() {
-      _isloading = true;
-    });
+    print('status 2');
     if (_editedproduct.id != null) {
+      setState(() {
+        _isloading = true;
+      });
       Provider.of<ProductData>(context, listen: false)
           .updateproduct(_editedproduct.id, _editedproduct);
       setState(() {
         _isloading = false;
       });
       Navigator.of(context).pop();
-    } else
+    } else {
+      print('status 1');
+      setState(() {
+        _isloading = true;
+      });
       Provider.of<ProductData>(context, listen: false)
           .addProduct(_editedproduct)
-          .then((_) {
+          .catchError((e) {
+        print('error recieved');
+        return showDialog<Null>(
+            context: context,
+            builder: (ctx) {
+              return AlertDialog(
+                title: Text('Error Ocurred'),
+                content: Text('Something went wrong'),
+                actions: [
+                  FlatButton(
+                    onPressed: () {
+                      Navigator.of(ctx).pop();
+                    },
+                    child: Text('Close'),
+                  )
+                ],
+              );
+            });
+      }).then((_) {
         setState(() {
+          print('status future recieved');
           _isloading = false;
         });
         Navigator.of(context).pop();
       });
+    }
   }
 
   Widget build(BuildContext context) {
@@ -100,7 +131,10 @@ class _EditProductScreenState extends State<EditProductScreen> {
         actions: [
           IconButton(
             icon: Icon(Icons.save),
-            onPressed: () => saveform,
+            onPressed: () {
+              print('status 4');
+              return saveform();
+            },
           )
         ],
       ),
@@ -125,9 +159,9 @@ class _EditProductScreenState extends State<EditProductScreen> {
                       onSaved: (value) {
                         _editedproduct = Product(
                             title: value,
+                            id: _editedproduct.id,
                             price: _editedproduct.price,
                             description: _editedproduct.description,
-                            id: _editedproduct.id,
                             isFavourite: _editedproduct.isFavourite,
                             imageurl: _editedproduct.imageurl);
                       },
@@ -152,9 +186,9 @@ class _EditProductScreenState extends State<EditProductScreen> {
                       onSaved: (value) {
                         _editedproduct = Product(
                             title: _editedproduct.title,
+                            id: _editedproduct.id,
                             price: double.parse(value),
                             description: _editedproduct.description,
-                            id: _editedproduct.id,
                             isFavourite: _editedproduct.isFavourite,
                             imageurl: _editedproduct.imageurl);
                       },
@@ -182,8 +216,8 @@ class _EditProductScreenState extends State<EditProductScreen> {
                             title: _editedproduct.title,
                             price: _editedproduct.price,
                             description: value,
-                            isFavourite: _editedproduct.isFavourite,
                             id: _editedproduct.id,
+                            isFavourite: _editedproduct.isFavourite,
                             imageurl: _editedproduct.imageurl);
                       },
                       validator: (val) {
@@ -225,9 +259,10 @@ class _EditProductScreenState extends State<EditProductScreen> {
                                 isFavourite: _editedproduct.isFavourite,
                                 price: _editedproduct.price,
                                 description: _editedproduct.description,
-                                id: _editedproduct.id,
                                 imageurl: value,
+                                id: _editedproduct.id,
                               );
+                              print('status 5');
                             },
                             validator: (val) {
                               if (val.isEmpty) return 'cannot be left empty';
