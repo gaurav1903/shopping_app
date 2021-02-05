@@ -39,6 +39,32 @@ class ProductData with ChangeNotifier {
     return [..._items];
   }
 
+  Future<void> fetchProducts() async {
+    const url =
+        "https://shopping-app-2cb0f-default-rtdb.firebaseio.com//productdata.json";
+    try {
+      final response = await http.get(url);
+      final extracted_data = json.decode(response.body) as Map<String, dynamic>;
+      extracted_data.forEach((id, prod_info) {
+        addProd(Product(
+            id: id,
+            title: prod_info['title'],
+            description: prod_info['description'],
+            imageurl: prod_info['imageurl'],
+            price: prod_info['price'],
+            isFavourite: prod_info['isfavourite']));
+      });
+    } catch (error) {
+      print(error);
+    }
+    notifyListeners();
+  }
+
+  Future<void> addProd(Product prod) {
+    _items.add(prod);
+    notifyListeners();
+  }
+
   Future<void> addProduct(Product prod) {
     print('adding status');
     const url =

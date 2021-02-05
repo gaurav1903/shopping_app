@@ -55,7 +55,6 @@ class _EditProductScreenState extends State<EditProductScreen> {
     pricefocusnode.dispose();
     descriptfocusnode.dispose;
     imageurlcontroller.dispose();
-    imageurlfocusnode.dispose();
     super.dispose();
   }
 
@@ -75,7 +74,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
     }
   }
 
-  void saveform() {
+  Future<void> saveform() async {
     print('status 3');
     _form.currentState.save();
     print('status 2');
@@ -94,11 +93,16 @@ class _EditProductScreenState extends State<EditProductScreen> {
       setState(() {
         _isloading = true;
       });
-      Provider.of<ProductData>(context, listen: false)
-          .addProduct(_editedproduct)
-          .catchError((e) {
+      try {
+        await Provider.of<ProductData>(context, listen: false)
+            .addProduct(_editedproduct);
+        setState(() {
+          print('status future recieved');
+          _isloading = false;
+        });
+      } catch (error) {
         print('error recieved');
-        return showDialog<Null>(
+        await showDialog<Null>(
             context: context,
             builder: (ctx) {
               return AlertDialog(
@@ -114,13 +118,9 @@ class _EditProductScreenState extends State<EditProductScreen> {
                 ],
               );
             });
-      }).then((_) {
-        setState(() {
-          print('status future recieved');
-          _isloading = false;
-        });
+      } finally {
         Navigator.of(context).pop();
-      });
+      }
     }
   }
 
