@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'cart.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 
 class OrderItem {
   final String id;
@@ -20,6 +22,17 @@ class Orders with ChangeNotifier {
   }
 
   void addorders(List<CartItem> cartproducts, double total) {
+    // const url =
+    //     "https://shopping-app-2cb0f-default-rtdb.firebaseio.com/orders.json";
+    // return http
+    //     .patch(url,
+    //         body: json.encode({
+    //           'products': cartproducts,
+    //           'amount': total,
+    //           'datetime': DateTime.now()
+    //         }))
+    //     .then((savedorder) {
+    //   print(savedorder.body);
     _orders.insert(
         0,
         OrderItem(

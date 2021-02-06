@@ -30,7 +30,7 @@ class UserProductItem extends StatelessWidget {
                 Provider.of<ProductData>(context, listen: false)
                     .deleteproduct(id)
                     .catchError((e) {
-                  showDialog(
+                  showDialog<Null>(
                       context: context,
                       builder: (ctx) {
                         return AlertDialog(

@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+import '../models/exception.dart';
 
 class Product with ChangeNotifier {
   final String id;
@@ -14,8 +17,17 @@ class Product with ChangeNotifier {
       @required this.imageurl,
       this.isFavourite = false,
       @required this.price});
-  void togglefav() {
+  Future<void> togglefav() async {
+    final url =
+        "https://shopping-app-2cb0f-default-rtdb.firebaseio.com/productdata/$id.json";
     isFavourite = !isFavourite;
     notifyListeners();
+    try {
+      await http.patch(url, body: json.encode({'isfavourite': isFavourite}));
+    } catch (e) {
+      isFavourite = !isFavourite;
+      notifyListeners();
+      throw HttpException("Can't change favourites right now");
+    }
   }
 }

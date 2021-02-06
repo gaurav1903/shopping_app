@@ -29,7 +29,13 @@ class ProductItem extends StatelessWidget {
                   product.isFavourite ? Icons.favorite : Icons.favorite_border),
               color: Theme.of(context).accentColor,
               onPressed: () {
-                product.togglefav();
+                product.togglefav().catchError((e) {
+                  Scaffold.of(context).showSnackBar(SnackBar(
+                      content: Text(
+                    e,
+                    textAlign: TextAlign.center,
+                  )));
+                });
               },
             );
           }),
@@ -44,7 +50,7 @@ class ProductItem extends StatelessWidget {
                     'Added item to cart',
                     textAlign: TextAlign.center,
                   ),
-                  duration: Duration(seconds: 3),
+                  duration: Duration(seconds: 2),
                   action: SnackBarAction(
                     label: 'UNDO',
                     onPressed: () {
