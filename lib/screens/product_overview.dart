@@ -6,7 +6,6 @@ import 'package:provider/provider.dart';
 import 'package:shopping_app/providers/product_data.dart';
 import '../providers/cart.dart';
 import '../widgets/app_drawer.dart';
-import 'package:http/http.dart' as http;
 
 enum Filteropt { Favourites, All }
 
@@ -48,7 +47,7 @@ class _ProductOverviewScreenState extends State<ProductOverviewScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text('My Shop'),
-        actions: _isloading
+        actions: (_isloading)
             ? []
             : [
                 PopupMenuButton(

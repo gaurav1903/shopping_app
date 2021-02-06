@@ -28,7 +28,17 @@ class UserProductItem extends StatelessWidget {
               icon: Icon(Icons.delete),
               onPressed: () {
                 Provider.of<ProductData>(context, listen: false)
-                    .deleteproduct(id);
+                    .deleteproduct(id)
+                    .catchError((e) {
+                  showDialog(
+                      context: context,
+                      builder: (ctx) {
+                        return AlertDialog(
+                          title: Text('Error Ocurred'),
+                          content: Text('Try again after sometime'),
+                        );
+                      });
+                });
               },
               color: Theme.of(context).errorColor),
         ]),
