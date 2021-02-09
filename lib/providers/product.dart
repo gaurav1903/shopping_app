@@ -23,8 +23,13 @@ class Product with ChangeNotifier {
     isFavourite = !isFavourite;
     notifyListeners();
     try {
-      await http.patch(url, body: json.encode({'isfavourite': isFavourite}));
+      final response = await http.patch(url,
+          body: json.encode({'isfavourite': isFavourite}));
+      if (response.statusCode >= 400) {
+        throw HttpException("dont you mess with the program");
+      }
     } catch (e) {
+      print(e);
       isFavourite = !isFavourite;
       notifyListeners();
       throw HttpException("Can't change favourites right now");

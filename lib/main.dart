@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shopping_app/providers/cart.dart';
+import 'package:shopping_app/screens/auth_screen.dart';
 import 'package:shopping_app/screens/cart_screen.dart';
 import 'package:shopping_app/screens/product_overview.dart';
 import 'package:shopping_app/screens/user_product.dart';
@@ -9,6 +10,7 @@ import 'package:provider/provider.dart';
 import 'providers/product_data.dart';
 import 'providers/orders.dart';
 import './screens/orderscreen.dart';
+import 'providers/auth.dart';
 
 void main() {
   runApp(MyApp());
@@ -22,6 +24,9 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (context) {
           return ProductData();
         }),
+        ChangeNotifierProvider(
+          create: (_) => Auth(),
+        ),
         ChangeNotifierProvider(create: (_) => Cart()),
         ChangeNotifierProvider(create: (_) => Orders())
       ],
@@ -40,7 +45,7 @@ class MyApp extends StatelessWidget {
           '/userproduct': (_) => UserProduct(),
           '/editproduct': (_) => EditProductScreen(),
         },
-        home: ProductOverviewScreen(),
+        home: AuthScreen(),
       ),
     );
   }

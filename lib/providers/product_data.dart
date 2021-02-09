@@ -47,6 +47,7 @@ class ProductData with ChangeNotifier {
     try {
       final response = await http.get(url);
       final extracted_data = json.decode(response.body) as Map<String, dynamic>;
+      if (extracted_data == null) return;
       extracted_data.forEach((id, prod_info) {
         if (already[id] == null) {
           addProd(Product(
@@ -65,7 +66,7 @@ class ProductData with ChangeNotifier {
     }
   }
 
-  Future<void> addProd(Product prod) {
+  void addProd(Product prod) {
     _items.insert(0, prod);
     notifyListeners();
   }
