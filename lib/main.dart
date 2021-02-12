@@ -35,7 +35,7 @@ class MyApp extends StatelessWidget {
       ],
       child: Consumer<Auth>(builder: (ctx, authdata, _) {
         return MaterialApp(
-          title: 'Flutter Demo',
+          title: 'Flutter Demo',0
           theme: ThemeData(
             primarySwatch: Colors.purple,
             visualDensity: VisualDensity.adaptivePlatformDensity,
