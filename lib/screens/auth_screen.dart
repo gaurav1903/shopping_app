@@ -2,6 +2,7 @@ import 'dart:math';
 import '../providers/auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../models/exception.dart';
 
 enum AuthMode { Signup, Login }
 
@@ -100,6 +101,24 @@ class _AuthCardState extends State<AuthCard> {
   var _isLoading = false;
   final _passwordController = TextEditingController();
 
+  void ShowErrorDialog({String message = "An error occured"}) {
+    showDialog(
+        context: context,
+        builder: (ctx) {
+          return AlertDialog(
+            title: Text("ERROR OCCURED"),
+            content: Text(message),
+            actions: [
+              FlatButton(
+                  onPressed: () {
+                    Navigator.of(ctx).pop();
+                  },
+                  child: Text('Close'))
+            ],
+          );
+        });
+  }
+
   Future<void> _submit() async {
     if (!_formKey.currentState.validate()) {
       // Invalid!
@@ -109,14 +128,28 @@ class _AuthCardState extends State<AuthCard> {
     setState(() {
       _isLoading = true;
     });
-    if (_authMode == AuthMode.Login) {
-      // Log user in
-      await Provider.of<Auth>(context, listen: false)
-          .login(_authData['email'], _authData['password']);
-    } else {
-      await Provider.of<Auth>(context, listen: false)
-          .signup(_authData['email'], _authData['password']);
-      // Sign user up
+    try {
+      if (_authMode == AuthMode.Login) {
+        // Log user in
+        await Provider.of<Auth>(context, listen: false)
+            .login(_authData['email'], _authData['password']);
+      } else {
+        await Provider.of<Auth>(context, listen: false)
+            .signup(_authData['email'], _authData['password']);
+        // Sign user up
+      }
+    } on HttpException catch (e) {
+      var errmessage = "Authentication failed";
+      if (e.toString().contains('EMAIL_EXISTS')) {
+        errmessage = "This  email already exists";
+      } else if (e.toString().contains('INVALID_EMAIL')) {
+        errmessage = "Invalid email";
+      } else if (e.toString().contains('WEAK_PASSWORD')) {
+        errmessage = "PASSWORD IS TOO WEAK";
+      }
+      ShowErrorDialog(message: errmessage);
+    } catch (err) {
+      ShowErrorDialog();
     }
     setState(() {
       _isLoading = false;

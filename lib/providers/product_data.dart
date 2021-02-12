@@ -35,15 +35,16 @@ class ProductData with ChangeNotifier {
     //     imageurl:
     //         'https://media.mauvetree.com/wp-content/uploads/2018/04/Black-trench-coat-for-men.jpg')
   ];
-
+  final String authtoken;
+  ProductData(this.authtoken, this._items);
   List<Product> get items {
     return [..._items];
   }
 
   Map<String, int> already = {};
   Future<void> fetchProducts() async {
-    const url =
-        "https://shopping-app-2cb0f-default-rtdb.firebaseio.com/productdata.json";
+    final url =
+        "https://shopping-app-2cb0f-default-rtdb.firebaseio.com/productdata.json?auth=$authtoken";
     try {
       final response = await http.get(url);
       final extracted_data = json.decode(response.body) as Map<String, dynamic>;
@@ -73,8 +74,8 @@ class ProductData with ChangeNotifier {
 
   Future<void> addProduct(Product prod) {
     print('adding status');
-    const url =
-        "https://shopping-app-2cb0f-default-rtdb.firebaseio.com/productdata.json";
+    final url =
+        "https://shopping-app-2cb0f-default-rtdb.firebaseio.com/productdata.json?auth=$authtoken";
     return http
         .post(url,
             body: json.encode({
@@ -107,7 +108,7 @@ class ProductData with ChangeNotifier {
     final productindex = _items.indexWhere((element) => element.id == id);
     if (productindex >= 0) {
       final url =
-          "https://shopping-app-2cb0f-default-rtdb.firebaseio.com/productdata/$id.json";
+          "https://shopping-app-2cb0f-default-rtdb.firebaseio.com/productdata/$id.json?auth=$authtoken";
       await http.patch(url,
           body: json.encode({
             'title': newproduct.title,
@@ -124,7 +125,7 @@ class ProductData with ChangeNotifier {
 
   Future<void> deleteproduct(String id) async {
     final url =
-        "https://shopping-app-2cb0f-default-rtdb.firebaseio.com/productdata/$id.json";
+        "https://shopping-app-2cb0f-default-rtdb.firebaseio.com/productdata/$id.json?auth=$authtoken";
     final prodindex = _items.indexWhere((element) => element.id == id);
     var existingprod = _items[prodindex];
     _items.removeWhere((element) => element.id == id);
