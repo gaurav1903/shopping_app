@@ -32,7 +32,10 @@ class _ProductOverviewScreenState extends State<ProductOverviewScreen> {
       setState(() {
         _isloading = true;
       });
-      Provider.of<ProductData>(context).fetchProducts().then((value) {
+      final prod = Provider.of<ProductData>(context);
+      print("token = ${prod.authtoken}");
+      print("products=${prod.items}");
+      prod.fetchProducts().then((value) {
         setState(() {
           _isloading = false;
         });
