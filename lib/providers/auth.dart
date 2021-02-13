@@ -17,7 +17,6 @@ class Auth with ChangeNotifier {
             'password': password,
             'returnSecureToken': true
           }));
-      print(json.decode(response.body));
       final responsedata = json.decode(response.body);
       if (responsedata['error'] != null) //if exists
       {
@@ -43,7 +42,6 @@ class Auth with ChangeNotifier {
             'password': password,
             'returnSecureToken': true
           }));
-      print(json.decode(response.body));
       final responsedata = json.decode(response.body);
       if (responsedata['error'] != null) //if exists
       {
@@ -58,6 +56,10 @@ class Auth with ChangeNotifier {
     } catch (e) {
       throw e;
     }
+  }
+
+  String get userid {
+    return _userid;
   }
 
   bool get isAuth {

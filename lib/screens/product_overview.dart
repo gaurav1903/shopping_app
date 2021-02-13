@@ -33,14 +33,15 @@ class _ProductOverviewScreenState extends State<ProductOverviewScreen> {
         _isloading = true;
       });
       final prod = Provider.of<ProductData>(context);
-      print("token = ${prod.authtoken}");
-      print("products=${prod.items}");
+      // print("token = ${prod.authtoken}");
+      // print("products=${prod.items}");
       prod.fetchProducts().then((value) {
         setState(() {
           _isloading = false;
         });
       });
       _isinit = false;
+      print('done with fetching products');
     }
     super.didChangeDependencies();
   }

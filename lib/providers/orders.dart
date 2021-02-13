@@ -18,15 +18,25 @@ class OrderItem {
 
 class Orders with ChangeNotifier {
   List<OrderItem> _orders = [];
+  String token;
   Map<String, int> already = {};
   List<OrderItem> get orders {
     return [..._orders];
   }
 
+  void updateinfo(String token, List<OrderItem> l) {
+    token = token;
+    _orders = l;
+    for (OrderItem orderitem in _orders) {
+      already[orderitem.id] = 1;
+    }
+    notifyListeners();
+  }
+
   Future<void> restore_orders() {
     print("atleast it's executing");
-    const url =
-        "https://shopping-app-2cb0f-default-rtdb.firebaseio.com/orders.json";
+    final url =
+        "https://shopping-app-2cb0f-default-rtdb.firebaseio.com/orders.json?auth=$token";
     return http.get(url).then((response) {
       final orderdata =
           json.decode(response.body) as Map<String, dynamic>; //map of map
