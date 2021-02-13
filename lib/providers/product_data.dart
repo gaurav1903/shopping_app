@@ -25,7 +25,7 @@ class ProductData with ChangeNotifier {
   Future<void> fetchProducts() async {
     print('beginning fetching products');
     final url =
-        "https://shopping-app-2cb0f-default-rtdb.firebaseio.com/productdata.json?auth=$authtoken";
+        "https://shopping-app-2cb0f-default-rtdb.firebaseio.com/productdata.json?auth=$authtoken& orderBy='creatorid'&equalTo='$userid'";
     try {
       print(userid);
       print(authtoken);
@@ -69,7 +69,7 @@ class ProductData with ChangeNotifier {
   Future<void> addProduct(Product prod) {
     print('adding status');
     final url =
-        "https://shopping-app-2cb0f-default-rtdb.firebaseio.com/productdata.json?auth=$authtoken";
+        "https://shopping-app-2cb0f-default-rtdb.firebaseio.com/productdata.json?auth=$authtoken&orderBy='creatorid'&equalTo='$userid'";
     return http
         .post(url,
             body: json.encode({
@@ -77,6 +77,7 @@ class ProductData with ChangeNotifier {
               'description': prod.description,
               'imageurl': prod.imageurl,
               'price': prod.price,
+              'creatorid': userid,
             }))
         .then((value) {
       print(json.decode(value.body));

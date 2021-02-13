@@ -22,7 +22,7 @@ class Auth with ChangeNotifier {
       {
         throw HttpException(responsedata['error']['message']);
       }
-      _token = responsedata['idtoken'];
+      _token = responsedata['idToken'];
       _userid = responsedata['localId'];
       _expirydate = DateTime.now()
           .add(Duration(seconds: int.parse(responsedata['expiresIn'])));
