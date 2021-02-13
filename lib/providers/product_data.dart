@@ -7,6 +7,7 @@ import '../models/exception.dart';
 class ProductData with ChangeNotifier {
   List<Product> _items = [];
   String authtoken;
+  List<Product> myitems = [];
   String userid;
   Map<String, int> already = {};
   // ProductData(this.authtoken, this._items);
@@ -22,26 +23,32 @@ class ProductData with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> fetchProducts() async {
+  Future<void> fetchProducts([bool filter = false]) async {
+    myitems = [];
     print('beginning fetching products');
     final url =
-        "https://shopping-app-2cb0f-default-rtdb.firebaseio.com/productdata.json?auth=$authtoken& orderBy='creatorid'&equalTo='$userid'";
+        'https://shopping-app-2cb0f-default-rtdb.firebaseio.com/productdata.json?auth=$authtoken';
     try {
-      print(userid);
-      print(authtoken);
-      final url2 =
-          "https://shopping-app-2cb0f-default-rtdb.firebaseio.com/users/$userid/favourites.json?auth=$authtoken";
-      final response2 = await http.get(url2);
-      print('second http request');
-      print(response2.statusCode);
-      final extractedresponse2 = json.decode(response2.body);
-      print(extractedresponse2);
+      // print(userid);
+      // print(authtoken);
       final response = await http.get(url);
+      // print(response.statusCode);
       final extracted_data = json.decode(response.body) as Map<String, dynamic>;
+      // print(extracted_data);
+      var extractedresponse2 = null;
+      if (filter == true) {
+        final url2 =
+            "https://shopping-app-2cb0f-default-rtdb.firebaseio.com/users/$userid/favourites.json?auth=$authtoken";
+        final response2 = await http.get(url2);
+        // print('second http request');
+        // print(response2.statusCode);
+        extractedresponse2 = json.decode(response2.body);
+        // print(extractedresponse2);
+      }
       if (extracted_data == null) return;
       extracted_data.forEach((id, prod_info) {
         if (already[id] == null) {
-          addProd(Product(
+          Product x = Product(
             id: id,
             isFavourite: extractedresponse2 == null
                 ? false
@@ -50,11 +57,12 @@ class ProductData with ChangeNotifier {
             description: prod_info['description'],
             imageurl: prod_info['imageurl'],
             price: prod_info['price'],
-          ));
+          );
+          addProd(x);
+          if (prod_info['creatorid'] == userid) myitems.add(x);
           already[id] = 1;
         }
       });
-
       notifyListeners();
     } catch (error) {
       print('error message -$error');
@@ -69,7 +77,7 @@ class ProductData with ChangeNotifier {
   Future<void> addProduct(Product prod) {
     print('adding status');
     final url =
-        "https://shopping-app-2cb0f-default-rtdb.firebaseio.com/productdata.json?auth=$authtoken&orderBy='creatorid'&equalTo='$userid'";
+        "https://shopping-app-2cb0f-default-rtdb.firebaseio.com/productdata.json?auth=$authtoken";
     return http
         .post(url,
             body: json.encode({

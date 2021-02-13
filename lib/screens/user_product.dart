@@ -7,12 +7,11 @@ import '../widgets/user_product.dart';
 
 class UserProduct extends StatelessWidget {
   Future<void> refresh(BuildContext ctx) async {
-    await Provider.of<ProductData>(ctx).fetchProducts();
+    await Provider.of<ProductData>(ctx).fetchProducts(true);
   }
 
   @override
   Widget build(BuildContext context) {
-    final product_data = Provider.of<ProductData>(context);
     return Scaffold(
       appBar: AppBar(
         title: Text('Your Products'),
@@ -33,21 +32,23 @@ class UserProduct extends StatelessWidget {
         },
         child: Padding(
           padding: EdgeInsets.all(10),
-          child: ListView.builder(
-            itemBuilder: (context, index) {
-              return Column(
-                children: [
-                  UserProductItem(
-                    title: product_data.items[index].title,
-                    imageurl: product_data.items[index].imageurl,
-                    id: product_data.items[index].id,
-                  ),
-                  Divider(),
-                ],
-              );
-            },
-            itemCount: product_data.items.length,
-          ),
+          child: Consumer<ProductData>(builder: (ctx, product_data, _) {
+            return ListView.builder(
+              itemBuilder: (context, index) {
+                return Column(
+                  children: [
+                    UserProductItem(
+                      title: product_data.myitems[index].title,
+                      imageurl: product_data.myitems[index].imageurl,
+                      id: product_data.myitems[index].id,
+                    ),
+                    Divider(),
+                  ],
+                );
+              },
+              itemCount: product_data.myitems.length,
+            );
+          }),
         ),
       ),
     );
