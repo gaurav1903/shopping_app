@@ -32,6 +32,13 @@ class Auth with ChangeNotifier {
     }
   }
 
+  void logout() {
+    _token = null;
+    _userid = null;
+    _expirydate = null;
+    notifyListeners();
+  }
+
   Future<void> login(String email, String password) async {
     const url =
         "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyDa585-C2kbUd9nC1RDUg297Ys9nus9UO4";
