@@ -36,7 +36,8 @@ class MyApp extends StatelessWidget {
             create: (_) => Orders(),
             update: (ctx, auth_obj, previousorders) {
               return previousorders
-                ..updateinfo(auth_obj.token, previousorders.orders);
+                ..updateinfo(
+                    auth_obj.token, previousorders.orders, auth_obj.userid);
             })
       ],
       child: Consumer<Auth>(builder: (ctx, authdata, _) {
