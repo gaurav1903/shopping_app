@@ -1,8 +1,10 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shopping_app/providers/cart.dart';
 import 'package:shopping_app/screens/auth_screen.dart';
 import 'package:shopping_app/screens/cart_screen.dart';
 import 'package:shopping_app/screens/product_overview.dart';
+import 'package:shopping_app/screens/splash_screen.dart';
 import 'package:shopping_app/screens/user_product.dart';
 import 'screens/edit_product_screen.dart';
 import 'screens/product_detail.dart';
@@ -56,7 +58,14 @@ class MyApp extends StatelessWidget {
             '/userproduct': (_) => UserProduct(),
             '/editproduct': (_) => EditProductScreen(),
           },
-          home: authdata.isAuth ? ProductOverviewScreen() : AuthScreen(),
+          home: authdata.isAuth
+              ? ProductOverviewScreen()
+              : FutureBuilder(
+                  future: authdata.tryautologin(),
+                  builder: (ctx, authresult) =>
+                      (authresult.connectionState == ConnectionState.waiting)
+                          ? SplashScreen()
+                          : AuthScreen()),
         );
       }),
     );
