@@ -33,6 +33,12 @@ class UserProduct extends StatelessWidget {
         child: Padding(
           padding: EdgeInsets.all(10),
           child: Consumer<ProductData>(builder: (ctx, product_data, _) {
+            product_data.items.map((x) {
+              print(x.id);
+            });
+            product_data.myitems.map((x) {
+              print(x.id);
+            });
             return ListView.builder(
               itemBuilder: (context, index) {
                 return Column(

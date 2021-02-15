@@ -44,29 +44,30 @@ class MyApp extends StatelessWidget {
       ],
       child: Consumer<Auth>(builder: (ctx, authdata, _) {
         return MaterialApp(
-          title: 'Flutter Demo',
-          theme: ThemeData(
-            primarySwatch: Colors.purple,
-            visualDensity: VisualDensity.adaptivePlatformDensity,
-            accentColor: Colors.deepOrange,
-            fontFamily: 'Lato',
-          ),
-          routes: {
-            '/productdetail': (_) => ProductDetail(),
-            '/cartscreen': (_) => CartScreen(),
-            '/orderscreen': (_) => OrderScreen(),
-            '/userproduct': (_) => UserProduct(),
-            '/editproduct': (_) => EditProductScreen(),
-          },
-          home: authdata.isAuth
-              ? ProductOverviewScreen()
-              : FutureBuilder(
-                  future: authdata.tryautologin(),
-                  builder: (ctx, authresult) =>
-                      (authresult.connectionState == ConnectionState.waiting)
+            title: 'Flutter Demo',
+            theme: ThemeData(
+              primarySwatch: Colors.purple,
+              visualDensity: VisualDensity.adaptivePlatformDensity,
+              accentColor: Colors.deepOrange,
+              fontFamily: 'Lato',
+            ),
+            routes: {
+              '/productdetail': (_) => ProductDetail(),
+              '/cartscreen': (_) => CartScreen(),
+              '/orderscreen': (_) => OrderScreen(),
+              '/userproduct': (_) => UserProduct(),
+              '/editproduct': (_) => EditProductScreen(),
+            },
+            home: authdata.isAuth
+                ? ProductOverviewScreen()
+                : FutureBuilder(
+                    future: authdata.tryautologin(),
+                    builder: (ctx, authresult) {
+                      return (authresult.connectionState ==
+                              ConnectionState.waiting)
                           ? SplashScreen()
-                          : AuthScreen()),
-        );
+                          : AuthScreen();
+                    }));
       }),
     );
   }

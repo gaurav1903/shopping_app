@@ -15,14 +15,17 @@ class _EditProductScreenState extends State<EditProductScreen> {
   final descriptfocusnode = FocusNode();
   final _form = GlobalKey<FormState>();
   final imageurlfocusnode = FocusNode();
-  var _editedproduct =
-      Product(id: null, title: '', price: 0, imageurl: '', description: '');
   var _initvalues = {
     'title': '',
     'description': '',
     'price': '',
     'imageurl': ''
   };
+  var _isinit = true;
+  var _isloading = false;
+  String productid;
+  Product _editedproduct =
+      Product(id: null, title: '', description: '', imageurl: '', price: 0);
   @override
   void initState() {
     imageurlfocusnode.addListener(() => updateimageurl);
@@ -32,9 +35,10 @@ class _EditProductScreenState extends State<EditProductScreen> {
   @override
   void didChangeDependencies() {
     if (_isinit) {
-      final productid = ModalRoute.of(context).settings.arguments;
+      productid = ModalRoute.of(context).settings.arguments;
+      print('productid = $productid');
       if (productid != null) {
-        final _editedproduct = Provider.of<ProductData>(context, listen: false)
+        _editedproduct = Provider.of<ProductData>(context, listen: false)
             .findbyid(productid);
         _initvalues = {
           'title': _editedproduct.title,
@@ -58,9 +62,6 @@ class _EditProductScreenState extends State<EditProductScreen> {
     super.dispose();
   }
 
-  var _isinit = true;
-  var _isloading = false;
-
   void updateimageurl() {
     if (!imageurlfocusnode.hasFocus) {
       if ((!imageurlcontroller.text.startsWith('http') &&
@@ -75,18 +76,21 @@ class _EditProductScreenState extends State<EditProductScreen> {
   }
 
   Future<void> saveform() async {
+    print('executing save form');
     print('status 3');
     _form.currentState.save();
     print('status 2');
+    print(_editedproduct.id);
+    print(_editedproduct.title);
+    print(_editedproduct.imageurl);
+    print(_editedproduct.price);
     if (_editedproduct.id != null) {
       setState(() {
         _isloading = true;
       });
+      print('updating product-1');
       await Provider.of<ProductData>(context, listen: false)
           .updateproduct(_editedproduct.id, _editedproduct);
-      setState(() {
-        _isloading = false;
-      });
       Navigator.of(context).pop();
     } else {
       print('status 1');
@@ -94,6 +98,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
         _isloading = true;
       });
       try {
+        print('adding1');
         await Provider.of<ProductData>(context, listen: false)
             .addProduct(_editedproduct);
         setState(() {
@@ -125,6 +130,9 @@ class _EditProductScreenState extends State<EditProductScreen> {
   }
 
   Widget build(BuildContext context) {
+    print('at built');
+    print(_editedproduct.id);
+    print(_editedproduct.imageurl);
     return Scaffold(
       appBar: AppBar(
         title: Text('Edit Product'),
@@ -157,6 +165,9 @@ class _EditProductScreenState extends State<EditProductScreen> {
                         FocusScope.of(context).requestFocus(pricefocusnode);
                       },
                       onSaved: (value) {
+                        print('check1');
+                        print(value);
+                        print(_editedproduct.id);
                         _editedproduct = Product(
                             title: value,
                             id: _editedproduct.id,
@@ -164,6 +175,8 @@ class _EditProductScreenState extends State<EditProductScreen> {
                             description: _editedproduct.description,
                             isFavourite: _editedproduct.isFavourite,
                             imageurl: _editedproduct.imageurl);
+                        print(_editedproduct.imageurl);
+                        print(_editedproduct.title);
                       },
                       validator: (val) {
                         if (val.isEmpty)
@@ -184,6 +197,8 @@ class _EditProductScreenState extends State<EditProductScreen> {
                         FocusScope.of(context).requestFocus(descriptfocusnode);
                       },
                       onSaved: (value) {
+                        print('check2');
+                        print(_editedproduct.id);
                         _editedproduct = Product(
                             title: _editedproduct.title,
                             id: _editedproduct.id,
@@ -191,6 +206,8 @@ class _EditProductScreenState extends State<EditProductScreen> {
                             description: _editedproduct.description,
                             isFavourite: _editedproduct.isFavourite,
                             imageurl: _editedproduct.imageurl);
+                        print(_editedproduct.imageurl);
+                        print(_editedproduct.title);
                       },
                       validator: (val) {
                         if (val.isEmpty) return 'please enter a value';
@@ -212,6 +229,8 @@ class _EditProductScreenState extends State<EditProductScreen> {
                       textInputAction: TextInputAction.next,
                       focusNode: descriptfocusnode,
                       onSaved: (value) {
+                        print('check3');
+                        print(_editedproduct.id);
                         _editedproduct = Product(
                             title: _editedproduct.title,
                             price: _editedproduct.price,
@@ -219,6 +238,8 @@ class _EditProductScreenState extends State<EditProductScreen> {
                             id: _editedproduct.id,
                             isFavourite: _editedproduct.isFavourite,
                             imageurl: _editedproduct.imageurl);
+                        print(_editedproduct.imageurl);
+                        print(_editedproduct.title);
                       },
                       validator: (val) {
                         if (val.isEmpty) return 'enter a description';
@@ -254,6 +275,8 @@ class _EditProductScreenState extends State<EditProductScreen> {
                             focusNode: imageurlfocusnode,
                             onFieldSubmitted: (_) => saveform,
                             onSaved: (value) {
+                              print('check4');
+                              print(_editedproduct.id);
                               _editedproduct = Product(
                                 title: _editedproduct.title,
                                 isFavourite: _editedproduct.isFavourite,
@@ -262,6 +285,8 @@ class _EditProductScreenState extends State<EditProductScreen> {
                                 imageurl: value,
                                 id: _editedproduct.id,
                               );
+                              print(_editedproduct.imageurl);
+                              print(_editedproduct.title);
                               print('status 5');
                             },
                             validator: (val) {
