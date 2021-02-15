@@ -39,6 +39,7 @@ class Auth with ChangeNotifier {
   }
 
   Future<void> setUserPreferences() async {
+    print('setuserpreferecnces');
     final prefs = await SharedPreferences.getInstance();
     final userdata = json.encode({
       'token': _token,
@@ -56,6 +57,8 @@ class Auth with ChangeNotifier {
     print(extracted);
     final extracteddata = json.decode(extracted) as Map<String, Object>;
     final expiry = DateTime.parse(extracteddata['expirydate']);
+    print('expiry status');
+    print(expiry.isBefore(DateTime.now()));
     if (expiry.isBefore(DateTime.now())) return false;
     _token = extracteddata['token'];
     _expirydate = expiry;
@@ -82,13 +85,16 @@ class Auth with ChangeNotifier {
       _authtimer.cancel();
       _authtimer = null;
     }
+    print(_authtimer);
+    print(_token);
     notifyListeners();
     final pref = await SharedPreferences.getInstance();
     pref.remove('userdata');
-    // pref.clear();
+    pref.clear();
   }
 
   Future<void> login(String email, String password) async {
+    print('atleast login is executing');
     const url =
         "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyDa585-C2kbUd9nC1RDUg297Ys9nus9UO4";
     try {
@@ -99,15 +105,18 @@ class Auth with ChangeNotifier {
             'returnSecureToken': true
           }));
       final responsedata = json.decode(response.body);
+      print('response data at login $responsedata');
       if (responsedata['error'] != null) //if exists
       {
+        print('fucking error');
+        print(responsedata['error']);
         throw HttpException(responsedata['error']['message']);
       }
       _token = responsedata['idToken'];
       _userid = responsedata['localId'];
       _expirydate = DateTime.now()
           .add(Duration(seconds: int.parse(responsedata['expiresIn'])));
-      print("token $_token");
+      print("token2 $_token");
       autologout();
       notifyListeners();
       setUserPreferences();
