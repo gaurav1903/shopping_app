@@ -14,11 +14,18 @@ class ProductItem extends StatelessWidget {
       borderRadius: BorderRadius.circular(10),
       child: GridTile(
         child: GestureDetector(
-            onTap: () {
-              Navigator.of(context)
-                  .pushNamed('/productdetail', arguments: product.id);
-            },
-            child: Image.network(product.imageurl, fit: BoxFit.cover)),
+          onTap: () {
+            Navigator.of(context)
+                .pushNamed('/productdetail', arguments: product.id);
+          },
+          child: FadeInImage(
+            placeholder: AssetImage('assets/images/placeholder.png'),
+            image: NetworkImage(
+              product.imageurl,
+            ),
+            fit: BoxFit.cover,
+          ),
+        ),
         footer: GridTileBar(
           backgroundColor: Colors.black54,
           title: Text(
