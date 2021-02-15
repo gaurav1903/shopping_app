@@ -17,9 +17,12 @@ class ProductDetail extends StatelessWidget {
           children: [
             Container(
                 width: double.infinity,
-                child: Image.network(
-                  selectedproduct.imageurl,
-                  fit: BoxFit.cover,
+                child: Hero(
+                  tag: selectedproduct.id,
+                  child: Image.network(
+                    selectedproduct.imageurl,
+                    fit: BoxFit.cover,
+                  ),
                 )),
             SizedBox(height: 10),
             Text(

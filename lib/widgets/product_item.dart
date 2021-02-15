@@ -18,12 +18,15 @@ class ProductItem extends StatelessWidget {
             Navigator.of(context)
                 .pushNamed('/productdetail', arguments: product.id);
           },
-          child: FadeInImage(
-            placeholder: AssetImage('assets/images/placeholder.jpg'),
-            image: NetworkImage(
-              product.imageurl,
+          child: Hero(
+            tag: product.id,
+            child: FadeInImage(
+              placeholder: AssetImage('assets/images/placeholder.jpg'),
+              image: NetworkImage(
+                product.imageurl,
+              ),
+              fit: BoxFit.cover,
             ),
-            fit: BoxFit.cover,
           ),
         ),
         footer: GridTileBar(
