@@ -15,28 +15,34 @@ class _OrderItemState extends State<OrderItem> {
   var expanded = false;
   @override
   Widget build(BuildContext context) {
-    return Card(
-      margin: EdgeInsets.all(10),
-      child: Column(
-        children: [
-          ListTile(
-            title: Text('\$${widget.order.amount}'),
-            subtitle: Text(
-                formatDate(DateTime.now(), [dd, mm, yyyy, hh, mm, ss])
-                    .toString()),
-            trailing: IconButton(
-              icon: Icon(expanded ? Icons.expand_less : Icons.expand_more),
-              onPressed: () {
-                setState(() {
-                  expanded = !expanded;
-                });
-              },
+    return AnimatedContainer(
+      duration: Duration(milliseconds: 300),
+      height:
+          expanded ? max(widget.order.products.length * 20.0 + 100, 170) : 100,
+      child: Card(
+        margin: EdgeInsets.all(10),
+        child: Column(
+          children: [
+            ListTile(
+              title: Text('\$${widget.order.amount}'),
+              subtitle: Text(
+                  formatDate(DateTime.now(), [dd, mm, yyyy, hh, mm, ss])
+                      .toString()),
+              trailing: IconButton(
+                icon: Icon(expanded ? Icons.expand_less : Icons.expand_more),
+                onPressed: () {
+                  setState(() {
+                    expanded = !expanded;
+                  });
+                },
+              ),
             ),
-          ),
-          if (expanded == true)
-            Container(
+            AnimatedContainer(
+              duration: Duration(milliseconds: 300),
               padding: EdgeInsets.symmetric(horizontal: 15, vertical: 4),
-              height: min(widget.order.products.length * 20.0 + 10, 150),
+              height: expanded
+                  ? min(widget.order.products.length * 20.0 + 10, 150)
+                  : 0,
               child: ListView(
                 children: widget.order.products.map((prod) {
                   return Row(
@@ -57,7 +63,8 @@ class _OrderItemState extends State<OrderItem> {
                 }).toList(),
               ),
             )
-        ],
+          ],
+        ),
       ),
     );
   }
