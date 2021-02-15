@@ -117,7 +117,7 @@ class _AuthCardState extends State<AuthCard>
     _slideAnimation = Tween<Offset>(begin: Offset(0, -1.5), end: Offset(0, 0))
         .animate(CurvedAnimation(
             parent: _animationController, curve: Curves.linear));
-    _heightAnimation.addListener(() {
+    _slideAnimation.addListener(() {
       setState(() {});
     });
     // TODO: implement initState
