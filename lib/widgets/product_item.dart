@@ -19,7 +19,7 @@ class ProductItem extends StatelessWidget {
                 .pushNamed('/productdetail', arguments: product.id);
           },
           child: FadeInImage(
-            placeholder: AssetImage('assets/images/placeholder.png'),
+            placeholder: AssetImage('assets/images/placeholder.jpg'),
             image: NetworkImage(
               product.imageurl,
             ),
