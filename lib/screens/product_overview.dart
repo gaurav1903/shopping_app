@@ -10,12 +10,12 @@ import '../widgets/app_drawer.dart';
 enum Filteropt { Favourites, All }
 
 class ProductOverviewScreen extends StatefulWidget {
+  bool _isinit = true;
   @override
   _ProductOverviewScreenState createState() => _ProductOverviewScreenState();
 }
 
 class _ProductOverviewScreenState extends State<ProductOverviewScreen> {
-  bool _isinit = true;
   bool showonlyfavourites = false;
   bool _isloading = false;
   @override
@@ -28,7 +28,7 @@ class _ProductOverviewScreenState extends State<ProductOverviewScreen> {
 
   @override
   void didChangeDependencies() {
-    if (_isinit) {
+    if (widget._isinit) {
       setState(() {
         _isloading = true;
       });
@@ -40,7 +40,7 @@ class _ProductOverviewScreenState extends State<ProductOverviewScreen> {
           _isloading = false;
         });
       });
-      _isinit = false;
+      widget._isinit = false;
       print('done with fetching products');
     }
     super.didChangeDependencies();
